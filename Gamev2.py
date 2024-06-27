@@ -1,14 +1,14 @@
 import random
-MAX_LINES = 3
 
+MAX_LINES = 3
 TOROW = 3
 TOCLM = 3
 
 letter = {
-    "A": 3,
-    "B": 5,
-    "C": 7,
-    "D": 9,
+    "A": 4,
+    "B": 6,
+    "C": 8,
+    "D": 10,
 }
 
 let_val = {
@@ -68,13 +68,13 @@ def get_slot_list(TOROW, TOCLM, letter):
 
 def get_balance():
     while True:
-        amount = input("How much is your balance? $ ")
+        amount = input("How much is your starting balance? $")
         if amount.isdigit():
             balance = int(amount)
-            if balance > 0:
+            if balance > 0 and balance < 10001:
                 break
             else:
-                print("Balance needs to be larger than $0.")
+                print("Starting balance needs to be between $1 - $10,000")
         else:
             print("please enter a number.")    
     
@@ -85,10 +85,10 @@ def get_lines():
         line = input(f"How many lines do you want to bet on (1 - {MAX_LINES}). ")
         if line.isdigit():
             lines = int(line)
-            if lines <= MAX_LINES:
+            if lines <= MAX_LINES and lines != 0:
                 break
             else:
-                print(f"Pick (1 - {MAX_LINES}). ")
+                print(f"Pick between (1 - {MAX_LINES}). ")
         else:
             print("please enter a number.")    
     
@@ -98,15 +98,13 @@ def get_bet(lines):
     bet = []
     i = 0
     while True:
-        mon = input(f"How much would you like to bet on line {i + 1}. $")
-        if mon.isdigit():
-            if int(mon) > 0:
-                bet.append(int(mon))
+        line_bet = input(f"How much would you like to bet on line {i + 1}. $")
+        if line_bet.isdigit():
+            if int(line_bet) >= 0:
+                bet.append(int(line_bet))
                 i += 1
                 if i == lines:
                     break
-            else:
-                print("Bet needs to be larger than $0. ")
         else:
             print("please enter a number.")
             
@@ -135,15 +133,24 @@ def game(balance):
     return win - total_bet
 
 def main():
+    print("Goal of the game is to get to $20,000 \n             GOOD LUCK!")
+    print()
     balance = get_balance()
     while True:
         print(f"Current balance ${balance}")
-        play = input("press enter to play. (q to quit)")
+        play = input("press enter to continue. (q to quit)")
         if play == "q":
             break
         else:
-             balance += game(balance) 
-    
+             balance += game(balance)
+             
+             if balance >= 20000:
+                 print("You won :)")
+                 break
+             elif balance <= 0:
+                 print("you Lost :(")
+                 break
+            
     print(f"you ended with ${balance}")
 
 main()
